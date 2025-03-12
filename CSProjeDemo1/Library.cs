@@ -14,8 +14,8 @@ namespace CSProjeDemo1
             Books = new List<Book>();
         }
 
-        public  List<IMember> Members { get; set; }
-        public  List<Book> Books { get; set; }
+        public List<IMember> Members { get; set; }
+        public List<Book> Books { get; set; }
 
         public void AddMember(IMember member)
         {
@@ -47,16 +47,22 @@ namespace CSProjeDemo1
 
             try
             {
-                foreach (var book in books)
+                foreach (var book in books.ToList())
                 {
-                    if (book.Status == Status.Borrowable)
+                    foreach (var item in Books.ToList())
                     {
-                        member.BorrowBook(book);
-                        Books.Remove(book);
-                        book.DecreaseStock();
-                        borrowedBooksDuringProcess.Add(book);
+                        if (item.Title == book.Title)
+                        {
+                            if (item.Status == Status.Borrowable)
+                            {
+                                member.BorrowBook(book);
+                                book.DecreaseStock();
+                                borrowedBooksDuringProcess.Add(book);
+                                break;
+                            }
+                            else throw new Exception($"{book.Title} is not available");
+                        }
                     }
-                    else throw new Exception($"{book.Title} is not available");
                 }
                 return true;
             }
@@ -66,7 +72,7 @@ namespace CSProjeDemo1
                 Books.Clear();
                 Books.AddRange(originalBooks);
 
-                foreach(var book in borrowedBooksDuringProcess)
+                foreach (var book in borrowedBooksDuringProcess)
                 {
                     member.ReturnBook(book);
                     book.IncreaseStock();
@@ -75,15 +81,40 @@ namespace CSProjeDemo1
             }
         }
 
-        public void RetrieveBook(List<Book> books, IMember member)
+        public bool RetrieveBook(List<Book> books, IMember member)
         {
-            foreach (var book in books.ToList())
+            //Burada da aynı işlem var. Nasıl bir UI hazırlanır bilmiyorum ama garanti olsun diye iade etmek istediği kitaplar arasında daha önceden ödünç almadığı bir kitap olursa işlemi geri almak zorundayım.
+
+            //Backups
+            List<Book> originalBooks = new List<Book>(Books);
+            List<Book> retrievedBooksDuringProcess = new List<Book>();
+            try
             {
-                member.ReturnBook(book);
-                Book x = Books.Find(b => b.ISBN == book.ISBN);
-                Books.Remove(x);
-                Books.Add(book);
-                book.IncreaseStock();
+                foreach (var item in books.ToList())
+                {
+                    if (member.BorrowedBooks.Contains(item))
+                    {
+                        member.ReturnBook(item);
+                        item.IncreaseStock();
+                        retrievedBooksDuringProcess.Add(item);
+                    }
+                    else throw new Exception($"{item.Title} is not in your borrowed books.");
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+
+                //Rollback process
+                Books.Clear();
+                Books.AddRange(originalBooks);
+
+                foreach (var book in retrievedBooksDuringProcess)
+                {
+                    member.BorrowBook(book);
+                    book.DecreaseStock();
+                }
+                return false;
             }
         }
     }

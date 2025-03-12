@@ -10,12 +10,13 @@ namespace CSProjeDemo1
     {
         public override void DecreaseStock()
         {
-            if (InStock >= 1)
+            if (InStock > 1)
             {
                 InStock--;
             }
             else if (InStock == 1)
             {
+                InStock--;
                 Status = Status.NotAvailable;
             }
             else throw new Exception("Book is not available");

@@ -5,9 +5,9 @@ namespace System
 {
     internal class Program
     {
+        static Library library = new Library();
         static void Main(string[] args)
         {
-            Library library = new Library();
 
             #region Seed Data
             Book book1 = new HistoryBook
@@ -15,7 +15,7 @@ namespace System
                 ISBN = "1234567890",
                 Title = "HistoryBook2",
                 Author = "Anonymous",
-                InStock = 5,
+                InStock = 1,
                 PublishDate = DateTime.Now,
                 Status = Status.Borrowable
             };
@@ -25,9 +25,9 @@ namespace System
                 ISBN = "1234567891",
                 Title = "HistoryBook3",
                 Author = "Anonymous",
-                InStock = 2,
+                InStock = 4,
                 PublishDate = DateTime.Now,
-                Status = Status.Borrowed
+                Status = Status.Borrowable
             };
 
             Book book3 = new HistoryBook
@@ -35,7 +35,7 @@ namespace System
                 ISBN = "1234567892",
                 Title = "HistoryBook4",
                 Author = "Anonymous",
-                InStock = 1,
+                InStock = 5,
                 PublishDate = DateTime.Now,
                 Status = Status.Borrowable
             };
@@ -126,7 +126,7 @@ namespace System
                 Name = "John",
                 Surname = "Doe"
             };
-            member1.BorrowedBooks.Add(book8);
+            member1.BorrowedBooks.Add(book6);
             member1.BorrowedBooks.Add(book9);
             member1.BorrowedBooks.Add(book10);
 
@@ -141,57 +141,92 @@ namespace System
 
             #endregion
 
-            #region ShowAllMembers
+            ShowBorrowedMembers();
+            ShowBookStatus();
 
-            //library.ShowMembers().ForEach(member =>
-            //{
-            //    Console.WriteLine($"Name: {member.Name} Surname: {member.Surname}");
-            //});
+            Console.ReadLine();
 
-            //var result = library.ShowMembers();
+            var success1 = library.LendBook(new List<Book> { book1, book2, book3 }, member2);
 
-            #endregion
+            ShowBorrowedMembers();
+            ShowBookStatus();
 
-            #region ShowBorrowedMembers
+            if (!success1) Console.WriteLine("****************** Lend operation failed. ******************");
 
-            //library.ShowMembers().ForEach(member =>
-            //{
-            //    foreach (var book in member.GetBorrowedBooks())
-            //    {
-            //        Console.WriteLine($"Name: {member.Name} Surname: {member.Surname} Book: {book.Title}");
-            //    }
-            //});
+            Console.ReadLine();
 
-            #endregion
+            var success2 = library.LendBook(new List<Book> { book1 }, member4);
 
-            #region ShowBookStatusForEachType
+            ShowBorrowedMembers();
+            ShowBookStatus();
 
-            //library.ShowBooks().ForEach(book =>
-            //{
-            //    if (book.Status == Status.Borrowable)
-            //    {
-            //        Console.WriteLine($"Title: {book.Title} Author: {book.Author} is available. Stock is {book.InStock}");
-            //    }
-            //    else if (book.Status == Status.Borrowed)
-            //    {
-            //        Console.WriteLine($"Title: {book.Title} Author: {book.Author} is borrowed. Stock is {book.InStock}");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine($"Title: {book.Title} Author: {book.Author} is not available. Stock is {book.InStock}");
-            //    }
-            //});
+            if (!success2) Console.WriteLine("****************** Lend operation failed. ******************");  //Burada hata verecek çünkü book1'in stock'u 0 ve Status'u NotAvailable oldu.
 
-            #endregion
+            Console.ReadLine();
 
-            #region ShowBooksThatLibraryOwns
+            var success3 = library.RetrieveBook(new List<Book> { book1, book2 }, member2);
 
-            //library.ShowBooks().ForEach(book =>
-            //{
-            //    Console.WriteLine($"Title: {book.Title} Author: {book.Author}");
-            //});
+            ShowBorrowedMembers();
+            ShowBookStatus();
 
-            #endregion
+            if (!success3) Console.WriteLine("****************** Retrieve operation failed. ******************");
+
+            Console.ReadLine();
+
+            var success4 = library.RetrieveBook(new List<Book> { book2 }, member2);
+
+            ShowBorrowedMembers();
+            ShowBookStatus();
+
+            if (!success4) Console.WriteLine("****************** Retrieve operation failed. ******************"); //Burada hata verecek çünkü book2'yi teslim etmişti. Artık book2'yi teslim edemez.
+
+            Console.ReadLine();
+        }
+
+        private static void ShowBooksThatLibraryOwns()
+        {
+            library.ShowBooks().ForEach(book =>
+            {
+                Console.WriteLine($"Title: {book.Title} Author: {book.Author}");
+            });
+        }
+
+        private static void ShowBookStatus()
+        {
+            library.ShowBooks().ForEach(book =>
+            {
+                if (book.Status == Status.Borrowable)
+                {
+                    Console.WriteLine($"Title: {book.Title} Author: {book.Author} is available. Stock is {book.InStock}");
+                }
+                else if (book.Status == Status.Borrowed)
+                {
+                    Console.WriteLine($"Title: {book.Title} Author: {book.Author} is borrowed. Stock is {book.InStock}");
+                }
+                else
+                {
+                    Console.WriteLine($"Title: {book.Title} Author: {book.Author} is not available. Stock is {book.InStock}");
+                }
+            });
+        }
+
+        private static void ShowBorrowedMembers()
+        {
+            library.ShowMembers().ForEach(member =>
+            {
+                foreach (var book in member.GetBorrowedBooks())
+                {
+                    Console.WriteLine($"Name: {member.Name} Surname: {member.Surname} Book: {book.Title}");
+                }
+            });
+        }
+
+        private static void ShowMembers()
+        {
+            library.ShowMembers().ForEach(member =>
+            {
+                Console.WriteLine($"Name: {member.Name} Surname: {member.Surname}");
+            });
         }
     }
 }
