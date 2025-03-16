@@ -1,0 +1,50 @@
+﻿Payslips, MART 2025
+
+{
+  "Personnel_Name": "Tumay Ozyazici",
+  "Hours_of_Work": 200,
+  "Main_Pay": "₺101.000,00",
+  "Overtime_or_Bonus": "₺1.000,00",
+  "Total_Pay": "₺102.000,00"
+}
+
+{
+  "Personnel_Name": "Ipek Buyukyildiz",
+  "Hours_of_Work": 250,
+  "Main_Pay": "₺132.000,00",
+  "Overtime_or_Bonus": "₺2.000,00",
+  "Total_Pay": "₺134.000,00"
+}
+
+{
+  "Personnel_Name": "Ismail Kicimusla",
+  "Hours_of_Work": 9,
+  "Main_Pay": "₺3.600,00",
+  "Overtime_or_Bonus": "₺0,00",
+  "Total_Pay": "₺3.600,00"
+}
+
+{
+  "Personnel_Name": "Cagatay Cora",
+  "Hours_of_Work": 200,
+  "Main_Pay": "₺115.500,00",
+  "Overtime_or_Bonus": "₺16.500,00",
+  "Total_Pay": "₺132.000,00"
+}
+
+{
+  "Personnel_Name": "Mehmet Goruryilmaz",
+  "Hours_of_Work": 200,
+  "Main_Pay": "₺126.000,00",
+  "Overtime_or_Bonus": "₺18.000,00",
+  "Total_Pay": "₺144.000,00"
+}
+
+Personnel with less than 10 hours of work:
+
+{
+  "Personnel_Name": "Ismail Kicimusla",
+  "Hours_of_Work": 9,
+  "Hourly_Wage": "₺400,00"
+}
+

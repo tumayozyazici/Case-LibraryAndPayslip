@@ -1,0 +1,22 @@
+﻿[
+  {
+    "FullName": "Tumay Ozyazici",
+    "Title": "Manager"
+  },
+  {
+    "FullName": "Ipek Buyukyildiz",
+    "Title": "Manager"
+  },
+  {
+    "FullName": "Ismail Kicimusla",
+    "Title": "Officer"
+  },
+  {
+    "FullName": "Cagatay Cora",
+    "Title": "Officer"
+  },
+  {
+    "FullName": "Mehmet Goruryilmaz",
+    "Title": "Officer"
+  }
+]
